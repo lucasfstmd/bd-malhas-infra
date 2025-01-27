@@ -140,3 +140,6 @@ certs
 
 .idea/
 /clickhouse-cluster/
+
+
+.python-version
