@@ -100,6 +100,8 @@ services:
       retries: 5
       start_period: 5s
     restart: always
+    networks:
+      - bd-malhas-network
 
   redis:
     # Redis is limited to 7.2-bookworm due to licencing change
@@ -114,6 +116,8 @@ services:
       retries: 50
       start_period: 30s
     restart: always
+    networks:
+      - bd-malhas-network
 
   airflow-webserver:
     <<: *airflow-common
@@ -131,6 +135,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - bd-malhas-network
 
   airflow-scheduler:
     <<: *airflow-common
@@ -146,6 +152,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - bd-malhas-network
 
   airflow-worker:
     <<: *airflow-common
@@ -169,6 +177,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - bd-malhas-network
 
   airflow-triggerer:
     <<: *airflow-common
@@ -184,6 +194,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - bd-malhas-network
 
   airflow-init:
     <<: *airflow-common
@@ -248,6 +260,8 @@ services:
     user: "0:0"
     volumes:
       - ${AIRFLOW_PROJ_DIR:-.}:/sources
+    networks:
+      - bd-malhas-network
 
   airflow-cli:
     <<: *airflow-common
@@ -261,6 +275,8 @@ services:
       - bash
       - -c
       - airflow
+    networks:
+      - bd-malhas-network
 
   # You can enable flower by adding "--profile flower" option e.g. docker-compose --profile flower up
   # or by explicitly targeted on the command line e.g. docker-compose up flower.
@@ -283,6 +299,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - bd-malhas-network
 
   spark-master:
     container_name: bd-malhas-spark-master
@@ -303,6 +321,8 @@ services:
     ports:
       - '9090:8080'
       - '7077:7077'
+    networks:
+      - bd-malhas-network
 
   spark-history-server:
     container_name: bd-malhas-spark-history
@@ -316,6 +336,8 @@ services:
       - ./config/spark-logs:/opt/spark/spark-events
     ports:
       - '18080:18080'
+    networks:
+      - bd-malhas-network
 
   spark-worker:
     #    container_name: da-spark-worker
@@ -329,6 +351,13 @@ services:
       - ./config/spark/book_data:/opt/spark/data
       - ./config/spark/spark_apps:/opt/spark/apps
       - ./config/spark/spark-logs:/opt/spark/spark-events
+    networks:
+      - bd-malhas-network
 
 volumes:
   postgres-db-volume:
+
+networks:
+  bd-malhas-network:
+    name: bd-malhas-network
+    driver: bridge
