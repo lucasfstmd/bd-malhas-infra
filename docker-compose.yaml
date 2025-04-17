@@ -354,9 +354,25 @@ services:
     networks:
       - bd-malhas-network
 
+  minio:
+    image: docker.io/bitnami/minio:2022
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    networks:
+      - bd-malhas-network
+    volumes:
+      - 'minio_data:/data'
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_DEFAULT_BUCKETS: ${MINIO_DEFAULT_BUCKETS}
+
 volumes:
   postgres-db-volume:
-
+  minio_data:
+    driver: local
+    
 networks:
   bd-malhas-network:
     name: bd-malhas-network
