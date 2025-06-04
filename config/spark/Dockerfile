@@ -1,3 +1,4 @@
+
 FROM python:3.12.4-bullseye as spark-base
 
 RUN apt-get update && \
@@ -25,7 +26,7 @@ RUN mkdir -p ${HADOOP_HOME} && mkdir -p ${SPARK_HOME}
 WORKDIR ${SPARK_HOME}
 
 
-RUN curl https://ftp.unicamp.br/pub/apache/spark/spark-3.3.1/spark-3.3.1-bin-hadoop3.tgz -o spark-3.3.1-bin-hadoop3.tgz \
+RUN curl "https://drive.usercontent.google.com/download?id=1__SHVAhza540yHzodJVVitwD4lbVzEz5&export=download&confirm=yy" -o spark-3.3.1-bin-hadoop3.tgz \
  && tar xvzf spark-3.3.1-bin-hadoop3.tgz --directory /opt/spark --strip-components 1 \
  && rm -rf spark-3.3.1-bin-hadoop3.tgz
 
